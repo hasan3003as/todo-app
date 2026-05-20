@@ -1,0 +1,16 @@
+# Virtual environment
+venv/
+
+# Database file (local data, don't share)
+todos.db
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# VS Code settings (personal to you)
+.vscode/
+
+# OS files
+Thumbs.db
+.DS_Store

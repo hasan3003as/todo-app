@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📝 My To-Do List</h1>
+
+        <!-- Add Task Form -->
+        <div class="add-task-form" role="form">
+            <form action="/add" method="POST">
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="What needs to be done?"
+                    required
+                    autofocus
+                >
+                <button type="submit">Add Task</button>
+            </form>
+        </div>
+
+        <!-- Task Counter -->
+        <p class="task-count">
+            {{ tasks|length }} task{{ 's' if tasks|length != 1 else '' }}
+            — {{ tasks|selectattr('completed')|list|length }} completed
+        </p>
+
+        <!-- Task List -->
+        {% if tasks %}
+        <ul class="task-list">
+            {% for task in tasks %}
+            <li class="task-item {{ 'completed' if task.completed else '' }}">
+                <form action="/toggle/{{ task.id }}" method="POST" class="toggle-form">
+                    <button type="submit" class="toggle-btn" title="Toggle complete">
+                        {{ '✅' if task.completed else '⬜' }}
+                    </button>
+                </form>
+
+                <span class="task-title">{{ task.title }}</span>
+                <span class="task-date">{{ task.created_at[:10] }}</span>
+
+                <form action="/delete/{{ task.id }}" method="POST" class="delete-form">
+                    <button type="submit" class="delete-btn" title="Delete task">🗑️</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="empty-message">No tasks yet. Add one above!</p>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
